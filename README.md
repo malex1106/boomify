@@ -2,7 +2,9 @@
 
 ---
 
-Implementation of Boomerang's local sampling strategy using Stable Audio Open 1.0 by Alexander Fichtinger.
+Implementation of Boomerang's local sampling strategy using Stable Audio Open 1.0.
+
+This work is conducted as part of Alexander Fichtinger's Master thesis at the Institute of Computational Perception at JKU Linz, with Jan Schlüter as supervisor.
 
 ## Installation
 
