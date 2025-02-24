@@ -20,7 +20,7 @@ def main(args):
     params_str = f"{'noval ' if not args.val else ''}{'hung ' if args.hung_data else ''}{'fold' + str(args.fold) + ' ' if args.fold is not None else ''}{args.loss}-h{args.transformer_dim}-aug{args.tempo_augmentation}{args.pitch_augmentation}{args.mask_augmentation}{' nosumH ' if not args.sum_head else ''}{' nopartialT ' if not args.partial_transformers else ''}"
     if args.logger == "wandb":
         logger = WandbLogger(
-            project="beat_this", name=f"{args.name} {params_str}".strip()
+            project="beat_boom", name=f"{args.name} {params_str}".strip()
         )
     else:
         logger = None
