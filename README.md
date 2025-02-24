@@ -98,14 +98,18 @@ if args.boom_augmentation:
     augmentations["boom"] = {"noise": 40, "num": 2}
 ```
 
-To train a custom beat tracker model, follow the instructions at https://github.com/CPJKU/beat_this to set up the python-environment.
+To train a custom beat tracker model, follow the instructions at https://github.com/CPJKU/beat_this to set up the python-environment. Note that you need to install this adapted version, e.g.:
+
+```bash
+% pip install -e .
+```
 
 The bash script <code>run_exp.sh</code> performs multiple experiments using different augmentation configurations:
 
 ```bash
 #!/bin/bash
 
-MAX_EPOCHS=600
+MAX_EPOCHS=400
 
 for seed in 0 1 2; do
     python launch_scripts/train.py --seed "$seed" --max-epochs "$MAX_EPOCHS" --no-val --no-tempo-augmentation --no-pitch-augmentation --no-mask-augmentation --no-boom-augmentation
