@@ -41,7 +41,7 @@ def main(args):
     if args.pitch_augmentation:
         augmentations["pitch"] = {"min": -5, "max": 6}
     if args.boom_augmentation:
-        augmentations["boom"] = {"noise": 40, "num": 2}
+        augmentations["boom"] = {"noise": args.boom_noise, "num": args.boom_num}
     if args.mask_augmentation:
         # kind, min_count, max_count, min_len, max_len, min_parts, max_parts
         augmentations["mask"] = {
@@ -229,7 +229,19 @@ if __name__ == "__main__":
         "--boom-augmentation",
         default=True,
         action=argparse.BooleanOptionalAction,
-        help="Use precomputed bommerang aumentation",
+        help="Use precomputed boomerang augmentation",
+    )
+    parser.add_argument(
+        "--boom-noise",
+        default=40,
+        type=int,
+        help="Boomerang noise level in percent (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--boom-num",
+        default=2,
+        type=int,
+        help="Boomerang number of versions (default: %(default)s)",
     )
     parser.add_argument(
         "--mask-augmentation",
