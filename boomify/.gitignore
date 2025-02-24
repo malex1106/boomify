@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.DS_Store
+
+augmentations/
+experiments/
+wandb/
+.vscode/
+boomify.egg-info/
+build/
