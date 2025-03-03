@@ -9,7 +9,7 @@
 </head>
 <body>
   <header>
-    <h1>MUSIC BOOMERANG: REUSING DIFFUSION MODELS<br>FOR DATA AUGMENTATION AND STYLE TRANSFER</h1>
+    <h1>Music Boomerang: Reusing Diffusion Models for Data Augmentation and Audio Manipulation</h1>
     <div class="authors">
       <div class="author">
         <strong>Alexander Fichtinger</strong>
@@ -24,7 +24,15 @@
         <div class="author-details">
           Institute of Computational Perception<br>
           Johannes Kepler University Linz, Austria<br>
-          <a href="https://www.jku.at/en/institute-of-computational-perception/about-us/people/jan-schlueter/">web site</a>
+          <a href="https://www.jku.at/en/institute-of-computational-perception/about-us/people/jan-schlueter/">home page</a>
+        </div>
+      </div>
+      <div class="author">
+        <strong>Gerhard Widmer</strong>
+        <div class="author-details">
+          Institute of Computational Perception<br>
+          Johannes Kepler University Linz, Austria<br>
+          <a href="https://www.jku.at/en/institute-of-computational-perception/about-us/people/gerhard-widmer/">home page</a>
         </div>
       </div>
     </div>
@@ -43,11 +51,12 @@
     </section>
     
     <section>
-      <h2>Audio Demos</h2>
+      <h2>Variations for Data Augmentation</h2>
       <p>
-        We used samples from the GTZAN genre dataset, which included the
-        following genres: classical, country, blues, disco, hiphop, jazz, metal, pop, reggae and rock. For each genre, the audio sample
-        was processed using four different noise levels for boomerang sampling: 0.2, 0.4, 0.6 and 0.8. 
+        We demonstrate Boomerang sampling on examples from the GTZAN genre dataset, which includes the
+        following genres: classical, country, blues, disco, hiphop, jazz, metal, pop, reggae and rock. For each genre, the example
+        was processed using four different noise levels for boomerang sampling: 0.2, 0.4, 0.6 and 0.8.
+        The prompt was set to “Music”, with a negative prompt of “Low quality”.
       </p>
 
       <table>
@@ -390,9 +399,12 @@
           </td>
         </tr>
       </table>
-      <br>
+    </section>
+    
+    <section>
+      <h2>Text-Guided Audio Manipulation</h2>
       <p>
-        Next, we'll show some <b>fine-tuned</b> variations using a specific text prompt ("Trumpet lead"), guidance-scale and noise level for a single sample.<br>
+        Next, we'll show some <b>guided</b> variations using a specific text prompt (“Trumpet lead”), and larger guidance scale and noise level, for a guitar recording.<br>
         Original audio:
       </p>
       <audio controls>
@@ -411,6 +423,14 @@
         <source src="demos/guitar_sugar_combined.mp3" type="audio/mp3">
         Your browser does not support the audio element.
       </audio>
+    </section>
+    
+    <section>
+      <h2>Code</h2>
+      <p>
+        To try Boomerang sampling online, we provide a <a href="https://colab.research.google.com/drive/1oVaC6aPEzQnOZ5t16jTWSa-1BfVHyeXr?usp=sharing">Colab notebook</a>.
+        Upon acceptance, we will also publish the code for sampling in a GitHub repository.
+      </p>
     </section>
   </main>
   <footer>
