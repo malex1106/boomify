@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Boomerang</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>MUSIC BOOMERANG: REUSING DIFFUSION MODELS<br>FOR DATA AUGMENTATION AND STYLE TRANSFER</h1>
+    <div class="authors">
+      <div class="author">
+        <strong>Alexander Fichtinger</strong>
+        <div class="author-details">
+          Institute of Computational Perception<br>
+          Johannes Kepler University Linz, Austria<br>
+          alexanderfichtinger@icloud.com
+        </div>
+      </div>
+      <div class="author">
+        <strong>Jan Schlüter</strong>
+        <div class="author-details">
+          Institute of Computational Perception<br>
+          Johannes Kepler University Linz, Austria<br>
+          <a href="https://www.jku.at/en/institute-of-computational-perception/about-us/people/jan-schlueter/">web site</a>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <hr>
+    <section>
+      <h2>Abstract</h2>
+      <p>
+        Generative models of music audio are typically used to generate output based solely on a text prompt or melody. Boomerang sampling, recently proposed for the image domain, allows generating output close to an existing example, using any pretrained diffusion model.
+        In this work, we explore its application in the audio domain as a tool for data augmentation or content manipulation. 
+        Specifically, implementing Boomerang sampling for Stable Audio Open, we augment training data for a state-of-the-art beat tracker, and attempt to replace musical instruments in recordings.
+        Our results show that the rhythmic structure of existing examples is mostly preserved, that it improves performance of the beat tracker, but only in scenarios of limited training data, and that it can accomplish text-based instrument replacement on monophonic inputs.
+        We publish our implementation to invite experiments on data augmentation in other tasks and explore further applications.
+      </p>
+    </section>
+    
+    <section>
+      <h2>Audio Demos</h2>
+      <p>
+        We used samples from the GTZAN genre dataset, which included the
+        following genres: classical, country, blues, disco, hiphop, jazz, metal, pop, reggae and rock. For each genre, the audio sample
+        was processed using four different noise levels for boomerang sampling: 0.2, 0.4, 0.6 and 0.8. 
+      </p>
+
+      <table>
+        <tr>
+          <th>Genre</th>
+          <th>Original Audio</th>
+          <th>Noise Level 0.20</th>
+          <th>Noise Level 0.40</th>
+          <th>Noise Level 0.60</th>
+          <th>Noise Level 0.80</th>
+        </tr>
+        <tr>
+          <td>Disco</td>
+          <td>
+            <audio controls>
+              <source src="demos/disco.mp3" type="audio/flac">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/disco_20.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/disco_40.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/disco_60.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/disco_80.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+        </tr>
+        <tr>
+          <td>Reggae</td>
+          <td>
+            <audio controls>
+              <source src="demos/reggae.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/reggae_20.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/reggae_40.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/reggae_60.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/reggae_80.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+        </tr>
+        <tr>
+          <td>Pop</td>
+          <td>
+            <audio controls>
+              <source src="demos/pop.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/pop_20.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/pop_40.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/pop_60.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/pop_80.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+        </tr>
+        <tr>
+          <td>Hiphop</td>
+          <td>
+            <audio controls>
+              <source src="demos/hiphop.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/hiphop_20.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/hiphop_40.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/hiphop_60.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/hiphop_80.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+        </tr>
+        <tr>
+          <td>Rock</td>
+          <td>
+            <audio controls>
+              <source src="demos/rock.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/rock_20.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/rock_40.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/rock_60.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/rock_80.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+        </tr>
+        <tr>
+          <td>Metal</td>
+          <td>
+            <audio controls>
+              <source src="demos/metal.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/metal_20.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/metal_40.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/metal_60.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/metal_80.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+        </tr>
+        <tr>
+          <td>Blues</td>
+          <td>
+            <audio controls>
+              <source src="demos/blues.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/blues_20.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/blues_40.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/blues_60.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/blues_80.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+        </tr>
+        <tr>
+          <td>Country</td>
+          <td>
+            <audio controls>
+              <source src="demos/country.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/country_20.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/country_40.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/country_60.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/country_80.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+        </tr>
+        <tr>
+          <td>Jazz</td>
+          <td>
+            <audio controls>
+              <source src="demos/jazz.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/jazz_20.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/jazz_40.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/jazz_60.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/jazz_80.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+        </tr>
+        <tr>
+          <td>Classical</td>
+          <td>
+            <audio controls>
+              <source src="demos/classical.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/classical_20.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/classical_40.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/classical_60.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+          <td>
+            <audio controls>
+              <source src="demos/classical_80.mp3" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio>
+          </td>
+        </tr>
+      </table>
+      <br>
+      <p>
+        Next, we'll show some <b>fine-tuned</b> variations using a specific text prompt ("Trumpet lead"), guidance-scale and noise level for a single sample.<br>
+        Original audio:
+      </p>
+      <audio controls>
+        <source src="demos/guitar_sugar_original.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+      </audio>
+
+      <p>Transformed audio:</p>
+      <audio controls>
+        <source src="demos/guitar_sugar_variation.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+      </audio>
+
+      <p>Combined audio:</p>
+      <audio controls>
+        <source src="demos/guitar_sugar_combined.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+      </audio>
+    </section>
+  </main>
+  <footer>
+    <p>© 2025 Alexander Fichtinger</p>
+  </footer>
+</body>
+</html>
