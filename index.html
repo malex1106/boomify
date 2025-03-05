@@ -404,7 +404,7 @@
     <section>
       <h2>Text-Guided Audio Manipulation</h2>
       <p>
-        Next, we'll show some <b>guided</b> variations using a specific text prompt (“Trumpet lead”), and larger guidance scale and noise level, for a guitar recording.<br>
+        Next, we'll show some <b>guided</b> variation using a specific text prompt (“Trumpet lead”), and larger guidance scale and noise level, for a guitar recording.<br>
         Original audio:
       </p>
       <audio controls>
@@ -421,6 +421,28 @@
       <p>Combined audio:</p>
       <audio controls>
         <source src="demos/guitar_sugar_combined.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+      </audio>
+
+      <h3>Polyphonic recordings</h3>
+      <p>
+        <b>Polyphonic</b> recordings can also be modified, but since the text prompt controls all generation in the reverse diffusion process, it is applied to all components of the mix.<br>
+        Original audio:
+      </p>
+      <audio controls>
+        <source src="demos/poly_disco00007.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+      </audio>
+
+      <p>Transformed audio with the specific text prompt ("Trumpet solo"):</p>
+      <audio controls>
+        <source src="demos/poly_disco00007_variation.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+      </audio>
+
+      <p>Combined audio:</p>
+      <audio controls>
+        <source src="demos/poly_disco00007_combined.mp3" type="audio/mp3">
         Your browser does not support the audio element.
       </audio>
     </section>
