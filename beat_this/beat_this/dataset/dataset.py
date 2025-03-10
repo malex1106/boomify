@@ -92,9 +92,8 @@ class BeatTrackingDataset(Dataset):
             if npz_file.exists():
                 npz_file_list = [npz_file]
                 # If boom-augmentation is enabled, create seamless access.
-                npz_boom_file = (self.spect_basepath / f"{dataset}_boom").with_suffix(".npz")
-                if "boom" in self.augmentations and npz_boom_file.exists():
-                    npz_file_list += [npz_boom_file]
+                if "boom" in self.augmentations:
+                    npz_file_list.extend(self.spect_basepath.glob(f"{dataset}_boom*.npz"))
                 spects[dataset] = MemmappedNpzFile(npz_file_list)
         return spects
 
