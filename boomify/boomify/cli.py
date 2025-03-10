@@ -111,14 +111,6 @@ def run(
     vae_length = int(model.transformer.config.sample_size) * model.vae.hop_length / target_sr
     overlap_s = vae_length * overlap
 
-    """
-    file_paths = [
-        r"D:\datasets\gtzan\test\blues.00000.wav",
-        r"D:\datasets\gtzan\test\blues.00001.wav",
-        r"D:\datasets\gtzan\test\\blues.00002.wav",
-        r"D:\datasets\gtzan\test\blues.00003.wav"
-    ]"""
-
     file_paths = list_audiofiles(path)
 
     print("---" * 20)
@@ -127,7 +119,7 @@ def run(
     print(f'Negative-prompt: "{negative_prompt}"')
     print(f"Latent blending/ overlap: {overlap*100}%")
     print(f"Number of files: {len(file_paths)}\n")
-    
+
     processor = AudioBatchProcessor(
         file_paths=file_paths,
         batch_size=batch_size,
@@ -141,7 +133,16 @@ def run(
         MatchingBeatsAndTempo()
     )
 
-    for batch, lengths, file_names in tqdm(processor, desc="Inference"):
+    batches = iter(tqdm(processor, desc="Inference"))
+
+    while True:
+        try:
+            batch, lengths, file_names = next(batches)
+        except StopIteration:
+            break
+        except Exception as exc:
+            print("Error:", file_names, exc)
+            continue
         previous_latent_tail = None
         outputs = []
         for seq in range(batch.shape[1]):
