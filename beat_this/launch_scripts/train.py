@@ -31,7 +31,10 @@ def main(args):
         torch.backends.cuda.enable_mem_efficient_sdp(False)
         torch.backends.cuda.enable_math_sdp(False)
 
-    data_dir = Path(__file__).parent.parent.relative_to(Path.cwd()) / "data"
+    if args.data_dir:
+        data_dir = Path(args.data_dir)
+    else:
+        data_dir = Path(__file__).parent.parent.relative_to(Path.cwd()) / "data"
     checkpoint_dir = (
         Path(__file__).parent.parent.relative_to(Path.cwd()) / "checkpoints"
     )
@@ -134,6 +137,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--name", type=str, default="")
     parser.add_argument("--gpu", type=int, default=0)
+    parser.add_argument("--data-dir", type=str, default=None)
     parser.add_argument(
         "--force-flash-attention", default=False, action=argparse.BooleanOptionalAction
     )
