@@ -3,7 +3,7 @@ import os.path
 from pathlib import Path
 
 
-MY_EXTS = {'.flac', '.wav'}
+MY_EXTS = {'.flac', '.wav', '.mp3', '.ogg'}
 
 def peak_normalize(audio):
     # Calculate the maximum absolute value

@@ -126,11 +126,18 @@ def get_parser():
         default=0,
         help="Which GPU to use, or -1 for CPU."
     )
+    parser.add_argument(
+        "--subset",
+        type=lambda s: slice(*(int(v) if v else None for v in s.split(':'))),
+        default=None,
+        metavar="START:STOP:STEP",
+        help="If given, defines a subset of files to process."
+    )
     return parser
 
 
 def run(
-    path, noise, overlap, prompt, negative_prompt, batch_size, num_aug, guidance_scale, num_inference_steps, path_to_npz, gpu
+    path, noise, overlap, prompt, negative_prompt, batch_size, num_aug, guidance_scale, num_inference_steps, path_to_npz, gpu, subset
 ):
     # Check if path_to_npz is given
     if path_to_npz is None:
@@ -164,7 +171,7 @@ def run(
     vae_length = int(model.transformer.config.sample_size) * model.vae.hop_length / target_sr_sao
     overlap_s = vae_length * overlap
 
-    file_paths = list_audiofiles(path)
+    file_paths = sorted(list_audiofiles(path))
 
     print("---" * 20)
     print(f"Dataset name: {dataset_name}")
@@ -174,6 +181,19 @@ def run(
     print(f"Latent blending/ overlap: {overlap*100}%")
     print(f"Number of files: {len(file_paths)}\n")
     
+    if subset:
+        file_paths = file_paths[subset]
+        print(f"Selected subset: {len(file_paths)}")
+
+    if os.path.exists(path_to_npz):
+        with ZipFile(path_to_npz, "r") as z:
+            existing_files = {name for name in z.namelist() if "/" in name}
+        completed = {fn for fn in file_paths
+                     if all(f'{os.path.splitext(os.path.basename(fn))[0]}/track_bs{int(noise*100)}_{idx}.npy' in existing_files
+                            for idx in range(1, num_aug + 1))}
+        print(f"Already completed: {len(completed)}")
+        file_paths = [fn for fn in file_paths if fn not in completed]
+
     processor = AudioBatchProcessor(
         file_paths=file_paths,
         batch_size=batch_size,
@@ -203,7 +223,6 @@ def run(
     logspect_class = LogMelSpect(audio_sr_out, **mel_args)
 
     with ZipFile(path_to_npz, "a") as z:
-        existing_folders = {name.split("/")[0] for name in z.namelist() if "/" in name}
         existing_files = {name for name in z.namelist() if "/" in name}
 
         # Iterate through batch (wave files)
@@ -211,11 +230,6 @@ def run(
             # Generate set of current file targets for the batch
             #batch_files = {f"{dataset_name}_{os.path.splitext(os.path.basename(name))[0]}" for name in file_names}
             batch_files = {f"{os.path.splitext(os.path.basename(name))[0]}" for name in file_names}
-            
-            # Check if any file from the batch exists
-            if not batch_files.intersection(existing_folders):
-                print("All files in batch are missing, skipping")
-                continue
             
             # Iterate through number of augmentations per wave file
             for cur_aug in range(1, num_aug + 1):
@@ -250,10 +264,6 @@ def run(
                     file_name = os.path.basename(file_names[i])
                     #file = f"{dataset_name}_{os.path.splitext(file_name)[0]}"
                     file = f"{os.path.splitext(file_name)[0]}"
-
-                    if file not in existing_folders:
-                        print(f"{file} does not exist, skipping")
-                        continue
 
                     path_to_augmentation = f"{file}/track_bs{int(noise*100)}_{cur_aug}.npy"
 

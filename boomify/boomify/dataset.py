@@ -20,9 +20,17 @@ class AudioBatchProcessor:
     def _precompute_file_info(self):
         files_info = []
         for file_path in self.file_paths:
-            info = torchaudio.info(file_path)
-            original_sr = info.sample_rate
-            num_frames = info.num_frames
+            try:
+                info = torchaudio.info(file_path)
+            except Exception:
+                from madmom.io.audio import load_ffmpeg_file
+                audio, original_sr = load_ffmpeg_file(file_path, dtype="float32", sample_rate=self.target_sr, num_channels=2)
+                audio = torch.as_tensor(audio.T)
+                num_frames = audio.shape[-1]
+            else:
+                audio = None
+                original_sr = info.sample_rate
+                num_frames = info.num_frames
 
             # Calculate the total number of samples after resampling
             if original_sr != self.target_sr:
@@ -34,7 +42,7 @@ class AudioBatchProcessor:
                 "file_path": file_path,
                 "original_sr": original_sr,
                 "num_samples": num_samples,
-                "waveform": None,  # Will be lazily loaded
+                "waveform": audio,  # Will be lazily loaded
             })
         return files_info
     
