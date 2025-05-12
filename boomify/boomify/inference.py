@@ -4,11 +4,11 @@ Implementation of AudioProcessor that handles model loading and boomerang sampli
 
 import torch
 
-from boomify.sampling import BommerangSampling
+from boomify.sampling import BoomerangSampling
 from boomify.model import load_model
 
 
-class AudioProcessor(BommerangSampling):
+class AudioProcessor(BoomerangSampling):
     def __init__(
             self, 
             percent_noise,

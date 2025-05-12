@@ -7,7 +7,7 @@ from diffusers.utils.torch_utils import randn_tensor
 from boomify.utils import peak_normalize
 
 
-class BommerangSampling:
+class BoomerangSampling:
     """
     Class for performing boomerang sampling from Stable Audio Open.
     Note that the model pipeline also needs to be changed 

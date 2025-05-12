@@ -1,10 +1,14 @@
-# Boomify (v0.1)
+# Music Boomerang: Reusing Diffusion Models for Data Augmentation and Audio Manipulation
 
----
+Official implementation of the paper "<a href="">Music Boomerang: Reusing Diffusion Models for Data Augmentation and Audio Manipulation</a>", accepted to SMC 2025.
 
-Implementation of Boomerang's local sampling strategy using Stable Audio Open 1.0.
+This work is conducted as part of Alexander Fichtinger's Master thesis at the [Institute of Computational Perception](https://www.jku.at/en/institute-of-computational-perception/) at JKU Linz, with Jan Schlüter as supervisor.
 
-This work is conducted as part of Alexander Fichtinger's Master thesis at the Institute of Computational Perception at JKU Linz, with Jan Schlüter as supervisor.
+Find the demo samples [here]().
+
+## Online Demo
+
+To try Boomerang sampling online, we provide a Google Colab notebook. Open our example [notebook](https://colab.research.google.com/drive/1oVaC6aPEzQnOZ5t16jTWSa-1BfVHyeXr?usp=sharing) and follow the instructions!
 
 ## Installation
 
@@ -24,6 +28,7 @@ Note that you need to be authenticated to access the Stable Audio Open model wei
 
 To generate local samples of a set of audio files, you can use either the command line tool or Python's audio processor.
 
+### Command Line
 In addition to the python package, a command line application called <code>boomify</code> is available. For a full documentation, run:
 
 ```bash
@@ -38,6 +43,23 @@ The basic usage is:
 
 Using <code>--gpu=1</code> uses the first GPU, whereas <code>--gpu=-1</code> forces the use of the CPU.
 
+### Python Class
+If you are a python user, you can directly use the <code>boomify.inference</code> module.
+
+Begin by instantiating the <code>AudioProcessor</code> class, which encapsulates the model and incorporates boomerang sampling:
+
+```python
+from boomify.inference import AudioProcessor
+pipeline = AudioProcessor(noise, latent_overlap, num_inferene_steps, device, verbose)
+```
+
+To boomify an audio sample, run:
+```python
+audio_output, latent_tail = pipeline(audio_in, prompt, negative_prompt, previous_latent_tail, guidance_scale, audio_start, audio_end)
+```
+
+For frozen overlaps (latent blending), ensure that the previous latent tail is explicitly passed to the pipeline, with dimensions matching those specified during the pipeline instantiation, where <code>latent_overlap</code> is specified as a fraction (e.g., 0.25). The pipeline outputs the reconstructed audio waveform along with the current latent tail to be used in the next window iteration. See <code>cli.py</code> for an example implementation.
+
 ## Beat This!
 
 You can use this framework to create variations/augmentations for the beat tracker from the ISMIR 2024 paper "[Beat This! Accurate Beat Tracking Without DBN Postprocessing](https://arxiv.org/abs/2407.21658)" by Francesco Foscarin, Jan Schlüter and Gerhard Widmer.
@@ -51,54 +73,35 @@ It is essential that the filenames of the raw audio data match the existing stru
 Example usage:
 
 ```bash
-% python beat_this/beat_augmenter.py path/to/raw/audios --path-to-npz path/to/npz --noise $NOISE --num-aug $NUMBER_OF_AUGMENTATIONS_PER_FILE --gpu $DEVICE
+% python beat_this/beat_augmenter.py path/to/raw/audios --path-to-npz path/to/npz --noise 0.4 --num-aug 6 --gpu
 ```
 
 The bash script <code>beat_this/run_augmentations.sh</code> can be used to automatically iterate through multiple datasets.
 
-If everything was successful, you should see the following .npz structure for the guitarset, with two augmentations per file and a noise level of 0.4:
+If everything was successful, the generated .npz file for the guitarset should be structured accordingly, based on the specified number of augmentations per file and the provided noise level, e.g.:
 
 ```plaintext
-guitarset.npz/
+guitarset_boom.npz/
 │── 00_BN1-129-Eb_comp_mix/
-│   │── track.npy
 │   │── track_bs40_1.npy
 │   │── track_bs40_2.npy
-│   │── track_ps-1.npy
-│   │── track_ps-2.npy
-│   │── track_ps-3.npy
-│   │── track_ps-4.npy
-│   │── track_ps-5.npy
-│   │── track_ps1.npy
-│   │── track_ps2.npy
-│   │── track_ps3.npy
-│   │── track_ps4.npy
-│   │── track_ps5.npy
-│   │── track_ps6.npy
-│   │── track_ts-4.npy
-│   │── track_ts-8.npy
-│   │── track_ts-12.npy
-│   │── track_ts-16npy
-│   │── track_ts-20.npy
-│   │── track_ts4.npy
-│   │── track_ts8.npy
-│   │── track_ts12.npy
-│   │── track_ts16npy
-│   │── track_ts20.npy
+│   │── track_bs40_3.npy
+│   │── track_bs40_4.npy
+│   │── track_bs40_5.npy
+│   │── track_bs40_6.npy
 |
 ...
 ```
 
 ### Training Beat Tracker
 
-The original beat tracker framework has been extended with boomerang augmentation (saved as beat_this). To support this, an additional parameter was introduced for training. Boomerang augmentation can be disabled by using <code>--no-boom-augmentation</code>. The relevant boomerang parameters must be explicitly defined in <code>train.py</code>:
+The original beat tracker framework has been extended with boomerang augmentation, available under the alias <code>beat_this</code>. To support this, new training parameters were introduced. Boomerang augmentation can be disabled by using the <code>--no-boom-augmentation</code> flag. When enabled, all relevant boomerang parameters must be explicitly passed to <code>train.py</code>, for example:
 
-```python
-if args.boom_augmentation:
-    augmentations["boom"] = {"noise": 40, "num": 2}
+```bash
+% python launch_scripts/train.py --boom-noise $NOISE --boom_num $NUMBER_OF_AUGMENTATIONS_PER_FILE
 ```
 
-To train a custom beat tracker model, follow the instructions at https://github.com/CPJKU/beat_this to set up the python-environment. Note that you need to install this adapted version, e.g.:
+To train a custom beat tracker model, follow the instructions at https://github.com/CPJKU/beat_this to set up the python-environment. Note that you need to install this adapted version, i.e., change directory to <code>beat_this</code> and run:
 
 ```bash
 % pip install -e .
