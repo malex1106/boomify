@@ -19,6 +19,13 @@ def peak_normalize(audio):
 
 
 def list_audiofiles(directory):
+    # If the path is a file, check if it's an audio file.
+    if os.path.isfile(directory):
+        if any(directory.endswith(ext) for ext in MY_EXTS):
+            return [directory]
+        else:
+            return []
+    
     # Efficiently get both .wav and .flac files using a single pattern
     files = []
     for ext in MY_EXTS:

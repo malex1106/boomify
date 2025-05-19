@@ -247,7 +247,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--boom-num",
-        default=2,
+        default=6,
         type=int,
         help="Boomerang number of versions (default: %(default)s)",
     )
