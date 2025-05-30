@@ -22,9 +22,9 @@ To get started, download or clone the repository and follow the instructions pro
 ```bibtex
 @inproceedings{fichtinger2025musicboomerang,
     author = {Fichtinger, Alexander and Schl{\"u}ter, Jan and Widmer, Gerhard},
-    title = {Music Boomerang: Reusing Diffusion Models for Data Augmentation and Audio Manipulation}
+    title = {Music Boomerang: Reusing Diffusion Models for Data Augmentation and Audio Manipulation},
     year = 2025,
     month = jul,
-    booktitle = {Proceedings of the 22st Sound and Music Computing Conference},
+    booktitle = {Proceedings of the 22nd Sound and Music Computing Conference},
 }
 ```
