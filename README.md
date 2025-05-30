@@ -4,7 +4,7 @@ Official implementation of the paper "<a href="">Music Boomerang: Reusing Diffus
 
 This work is conducted as part of Alexander Fichtinger's Master thesis at the [Institute of Computational Perception](https://www.jku.at/en/institute-of-computational-perception/) at JKU Linz, with Jan Schlüter as supervisor.
 
-Find the demo samples [here]().
+Check out [our project page](https://malex1106.github.io/boomify/) for demo audio samples.
 
 ## Online Demo
 
