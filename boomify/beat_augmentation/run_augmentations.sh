@@ -39,14 +39,16 @@ output_paths=(
     "candombe"
 )
 
+output_base="/opt/scratch/beat_this/spectrograms"
+
 # Path to your Python script
-PYTHON_SCRIPT="beat_this/beat_augmenter.py"
+PYTHON_SCRIPT="${0%/*}/beat_augmenter.py"
 
 # Number of augmentations
 NUM_AUG=8
 
 # Noise level
-NOISE=0.4
+NOISE="${2:-0.4}"
 
 # Device
 DEVICE="${1:-0}"
@@ -61,7 +63,7 @@ fi
 for i in "${!data_paths[@]}"; do
     dataset="${data_paths[$i]}"
     name="${output_paths[$i]}"
-    output="/opt/scratch/beat_this/spectrograms/${name}_boom.npz"
+    output="${output_base}/${name}_boom.npz"
     [ -f "${output%npz}lock" ] && continue
     touch "${output%npz}lock";
     echo "Processing dataset $dataset on GPU $DEVICE to $output"

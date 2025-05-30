@@ -16,3 +16,15 @@ This repository contains two main components:
 - [beat_this](beat_this/README.md) - An adapted version of the original <code>beat_this</code> beat tracker framework, extended to support **Boomerang augmentations**. For installation and training instructions, follow the [beat_this README](beat_this/README.md).
 
 To get started, download or clone the repository and follow the instructions provided in each components README file.
+
+## Citation
+
+```bibtex
+@inproceedings{fichtinger2025musicboomerang,
+    author = {Fichtinger, Alexander and Schl{\"u}ter, Jan and Widmer, Gerhard},
+    title = {Music Boomerang: Reusing Diffusion Models for Data Augmentation and Audio Manipulation}
+    year = 2025,
+    month = jul,
+    booktitle = {Proceedings of the 22st Sound and Music Computing Conference},
+}
+```
