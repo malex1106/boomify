@@ -95,7 +95,7 @@ class MatchingBeatsAndTempo(Metric):
         audio2_tempo, audio2_beat_times = extract_beats(audio2)
 
         tempo_score = compare_tempo(audio1_tempo, audio2_tempo)
-        beat_score = eval_beats(audio1_beat_times, audio2_beat_times)
+        beat_score = eval_beats(audio1_beat_times, audio2_beat_times, tolerance=self.tol)
         return tempo_score, beat_score
     
 
