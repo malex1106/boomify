@@ -1,67 +1,94 @@
 body {
-    font-family: 'Open Sans', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: rgb(249, 249, 249);
-    color: #333;
-  }
-  header {
-    text-align: center;
-    padding: 2rem;
-    color: rgb(53, 53, 53);
-  }
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: rgb(249, 249, 249);
+  color: #333;
+}
+p {
+    text-align: justify
+}
+header {
+  text-align: center;
+  padding: 2rem;
+  color: rgb(53, 53, 53);
+}
+main {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: auto;
+}
+section {
+  margin-bottom: 2rem;
+}
+h1 {
+  font-size: 32px;
+  text-transform: uppercase;
+  max-width: 55rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+h2 {
+  color: rgb(112, 112, 112);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+th, td {
+  border: 1px solid #ddd;
+  text-align: center;
+  padding: 10px;
+}
+th {
+  background-color: #f2f2f2;
+}
+audio {
+  margin: 1rem 0;
+  width: 100%;
+}
+.authors {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+  gap: 1rem;
+  margin-top: 1rem;;
+}
+.author {
+  text-align: center;
+  margin: 0 20px;
+}
+.author-details {
+  font-size: 0.9em;
+  color: #555;
+}
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #333;
+  color: white;
+  margin-top: 2rem;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 720px) {
   main {
-    padding: 2rem;
-    max-width: 1000px;
+    padding: 1rem;
     margin: auto;
   }
-  section {
+
+  h1 {
+    font-size: 24px;
     margin-bottom: 2rem;
   }
-  h1 {
-    font-size: 32px;
-    text-transform: uppercase;
-    max-width: 55rem;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  h2 {
-    color: rgb(112, 112, 112);
-  }
+
   table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
+    font-size: 0.65rem;
   }
-  th, td {
-    border: 1px solid #ddd;
-    text-align: center;
-    padding: 10px;
-  }
-  th {
-    background-color: #f2f2f2;
-  }
-  audio {
-    margin: 1rem 0;
-    width: 100%;
-  }
-  .authors {
-    display: flex;
-    justify-content: center;
-    margin-top: 0.5rem;
-  }
-  .author {
-    text-align: center;
-    margin: 0 20px;
-  }
-  .author-details {
-    font-size: 0.9em;
-    color: #555;
-  }
-  footer {
-    text-align: center;
-    padding: 1rem;
-    background-color: #333;
-    color: white;
-    margin-top: 2rem;
-  }
+}
