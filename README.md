@@ -1,6 +1,6 @@
 # Music Boomerang: Reusing Diffusion Models for Data Augmentation and Audio Manipulation
 
-Official implementation of the paper "<a href="">Music Boomerang: Reusing Diffusion Models for Data Augmentation and Audio Manipulation</a>", accepted to SMC 2025.
+Official implementation of the paper "<a href="https://arxiv.org/abs/2507.04864">Music Boomerang: Reusing Diffusion Models for Data Augmentation and Audio Manipulation</a>", accepted to SMC 2025.
 
 This work is conducted as part of Alexander Fichtinger's Master thesis at the [Institute of Computational Perception](https://www.jku.at/en/institute-of-computational-perception/) at JKU Linz, with Jan Schlüter as supervisor.
 
